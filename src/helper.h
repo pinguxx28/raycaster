@@ -6,5 +6,6 @@ float	radians(int		angle);
 int		degrees(float	angle);
 void	fix_angle(int *angle);
 int		max(int x, int y);
+float	sqr(float x);
 
 #endif
