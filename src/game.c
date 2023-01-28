@@ -17,6 +17,7 @@ void draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	raycast();
 	if (map_mode)
 	{
 		draw_map();

@@ -41,6 +41,95 @@ void move_player()
 	}
 }
 
+void raycast()
+{
+	int ray_angle = player.angle_degrees - 30;
+	for (int i = 0; i < 60; ++i, ++ray_angle)
+	{
+		fix_angle(&ray_angle);
+		float ray_angle_radians = radians(ray_angle);
+
+		float	ray_x = (float) player.x / TILE_SIZE,
+				ray_y = (float) player.y / TILE_SIZE;
+
+		float	ray_dir_x = cos(ray_angle_radians),
+				ray_dir_y = sin(ray_angle_radians);
+
+		float	step_size_x = sqrt(1.0 + sqr(ray_dir_y / ray_dir_x)),
+				step_size_y = sqrt(1.0 + sqr(ray_dir_x / ray_dir_y));
+
+		int		map_check_x = ray_x,
+				map_check_y = ray_y;
+		
+		float	ray_length_x,
+				ray_length_y;
+
+		int		step_x,
+				step_y;
+
+		if (ray_dir_x < 0)
+		{
+			step_x = -1;
+			ray_length_x = (ray_x - (float)map_check_x) * step_size_x;
+		}
+		else
+		{
+			step_x = 1;
+			ray_length_x = ((float)map_check_x + 1.0 - ray_x) * step_size_x;
+		}
+
+		if (ray_dir_y < 0)
+		{
+			step_y = -1;
+			ray_length_y = (ray_y - (float)map_check_y) * step_size_y;
+		}
+		else
+		{
+			step_y = 1;
+			ray_length_y = ((float)map_check_y + 1.0 - ray_y) * step_size_y;
+		}
+
+		bool tile_found = false;
+		float distance = 0;
+		float max_distance = max(MAP_W, MAP_H);
+
+		while (!tile_found && distance < max_distance)
+		{
+			if (ray_length_x < ray_length_y)
+			{
+				map_check_x += step_x;
+				distance = ray_length_x;
+				ray_length_x += step_size_x;
+			}
+			else
+			{
+				map_check_y += step_y;
+				distance = ray_length_y;
+				ray_length_y += step_size_y;
+			}
+
+			if (map_check_x >= 0 && map_check_x < MAP_W &&
+				map_check_y >= 0 && map_check_y < MAP_H)
+			{
+				if (map_index(map_check_x, map_check_y))
+				{
+					tile_found = 1;
+				}
+			}
+		}
+
+		float intersection_x,
+			  intersection_y;
+		if (tile_found)
+		{
+			intersection_x = ray_x + ray_dir_x * distance;
+			intersection_y = ray_y + ray_dir_y * distance;
+
+			draw_line(player.x, player.y, intersection_x * TILE_SIZE, intersection_y * TILE_SIZE);
+		}
+	}
+}
+
 void init_player()
 {
 	player.x = WIDTH / 2;

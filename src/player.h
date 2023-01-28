@@ -25,6 +25,7 @@ extern player_t player;
 
 void turn_player();
 void move_player();
+void raycast();
 
 void init_player();
 void draw_player();
