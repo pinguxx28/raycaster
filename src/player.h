@@ -7,9 +7,9 @@
 #include "helper.h"
 #include "map.h"
 
-#define PLAYER_RADIUS 4
-#define PLAYER_TURN_SPEED 8
-#define PLAYER_MOVEMENT_SPEED 4
+#define PLAYER_RADIUS			4
+#define PLAYER_TURN_SPEED		8
+#define PLAYER_MOVEMENT_SPEED	4
 
 typedef struct
 {

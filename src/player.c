@@ -5,11 +5,11 @@ player_t player;
 
 void turn_player()
 {
-	bool update_angle = false;
-	if (keys['a']) { player.angle_degrees -= PLAYER_TURN_SPEED; update_angle = true; }
-	if (keys['d']) { player.angle_degrees += PLAYER_TURN_SPEED; update_angle = true; }
+	bool turned = false;
+	if (keys['a']) { player.angle_degrees -= PLAYER_TURN_SPEED; turned = true; }
+	if (keys['d']) { player.angle_degrees += PLAYER_TURN_SPEED; turned = true; }
 
-	if (update_angle)
+	if (turned)
 	{
 		fix_angle(&player.angle_degrees);
 		player.angle_radians = radians(player.angle_degrees);
@@ -29,10 +29,10 @@ void move_player()
 		float x_offset = player.delta_x * PLAYER_MOVEMENT_SPEED * dir;
 		float y_offset = player.delta_y * PLAYER_MOVEMENT_SPEED * dir; 
 
-		int new_map_x = (player.x + x_offset) / TILE_SIZE;
-		int new_map_y = (player.y + y_offset) / TILE_SIZE;
 		int map_x = player.x / TILE_SIZE;
 		int map_y = player.y / TILE_SIZE;
+		int new_map_x = (player.x + x_offset) / TILE_SIZE;
+		int new_map_y = (player.y + y_offset) / TILE_SIZE;
 
 		if (!map_index(new_map_x, map_y))
 			player.x += x_offset;
@@ -55,12 +55,10 @@ void init_player()
 
 void draw_player()
 {
-	/* player circle */
 	float red[] = { 1, 0, 0 };
 	glColor3fv(red);
 	draw_circle(player.x, player.y, PLAYER_RADIUS);
 
-	/* pointing line */
 	float yellow[] = { 1, 1, 0 };
 	glColor3fv(yellow);
 	draw_line(player.x, player.y, player.x + player.delta_x * 20, player.y + player.delta_y * 20);
@@ -68,7 +66,8 @@ void draw_player()
 
 void updt_player()
 {
-	if (keys['t']) map_mode ^= 1;
+	if (keys['j'])	map_mode = 1;
+	else			map_mode = 0;
 
 	turn_player();
 	move_player();
