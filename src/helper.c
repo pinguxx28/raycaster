@@ -12,6 +12,12 @@ int degrees(float angle)
 
 void fix_angle(int *angle)
 {
-	while (*angle < 0) *angle += 360;
+	while (*angle <   0) *angle += 360;
 	while (*angle > 360) *angle -= 360;
+}
+
+int max(int x, int y)
+{
+	if (x >= y) return x;
+	else		return y;
 }
